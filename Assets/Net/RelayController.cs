@@ -1,4 +1,6 @@
+using Mono.Cecil.Cil;
 using System.Threading.Tasks;
+using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Authentication;
@@ -6,8 +8,8 @@ using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
 
 public class RelayController : MonoBehaviour
 {
@@ -16,6 +18,7 @@ public class RelayController : MonoBehaviour
     public GameObject menuPanel;
     [Header("Камера меню")]
     public Camera menuCamera;
+   
 
     private async void Start()
     {
@@ -31,14 +34,12 @@ public class RelayController : MonoBehaviour
     void FinalizeStart()
     {
         menuPanel.SetActive(false); 
-        if (menuCamera != null)
-        {
-            menuCamera.gameObject.SetActive(false); 
-        }
+        
 
         
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        
     }
 
     
@@ -51,12 +52,13 @@ public class RelayController : MonoBehaviour
 
             
             string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+            PlayerPrefs.SetString("FinalLobbyCode", joinCode); // вместо joinCode укажи свою переменную кода
+            PlayerPrefs.Save();
 
-            
             joinCodeText.text = "Код: " + joinCode;
             Debug.Log("Код игры: " + joinCode);
+        
 
-           
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(
                 allocation.RelayServer.IpV4,
                 (ushort)allocation.RelayServer.Port,
@@ -67,8 +69,14 @@ public class RelayController : MonoBehaviour
 
             NetworkManager.Singleton.StartHost();
             menuPanel.SetActive(false);
-            FinalizeStart();
             
+            FinalizeStart();
+            if (NetworkManager.Singleton.IsServer)
+            {
+                // Вместо цифры укажите НАЗВАНИЕ вашей игровой сцены текстом
+                NetworkManager.Singleton.SceneManager.LoadScene("GameScene", UnityEngine.SceneManagement.LoadSceneMode.Single);
+            }
+
         }
         catch (RelayServiceException e)
         {
