@@ -153,6 +153,7 @@ GameObject:
   - component: {fileID: 6243739724270211310}
   - component: {fileID: -4540329546025255505}
   - component: {fileID: 8324439868703880153}
+  - component: {fileID: -5467772985926758488}
   m_Layer: 0
   m_Name: Hunter
   m_TagString: Player
@@ -363,3 +364,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerColor
   playerRendere: {fileID: 2173008793201256876}
+--- !u!114 &-5467772985926758488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8515832363353994682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b267ed3710f86243a6f67dc59a262b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DisableMenuCamera
+  ShowTopMostFoldoutHeaderGroup: 1
