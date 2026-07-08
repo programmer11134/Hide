@@ -29,13 +29,6 @@ public class LexusRaycastGun : MonoBehaviour
         {
             // Выводим в консоль имя объекта, в который попали
             Debug.Log("Попадание в: " + hit.collider.name);
-
-            // Простой тест: красим то, во что попали, в красный цвет
-            Renderer hitRenderer = hit.collider.GetComponent<Renderer>();
-            if (hitRenderer != null)
-            {
-                hitRenderer.material.color = Color.red;
-            }
         }
         else
         {
