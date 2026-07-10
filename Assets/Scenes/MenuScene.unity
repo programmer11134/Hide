@@ -268,6 +268,7 @@ GameObject:
   - component: {fileID: 250259248}
   - component: {fileID: 250259247}
   - component: {fileID: 250259246}
+  - component: {fileID: 250259249}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -389,6 +390,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 250259244}
   m_CullTransparentMesh: 1
+--- !u!114 &250259249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250259244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b6f5597d12327644bd652d84de29612, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
+  hoverScaleMultiplier: 1.1
+--- !u!1 &358095771 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7104437105303834942, guid: 3fe7766b712b8d5448b6d3ef93b909da, type: 3}
+  m_PrefabInstance: {fileID: 1313447085}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &358095776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358095771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b6f5597d12327644bd652d84de29612, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
+  hoverScaleMultiplier: 1.1
 --- !u!114 &362987220 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3755419423556179672, guid: 5f887cc9ca42fa74ba8beed340fcd816, type: 3}
@@ -903,6 +935,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 894682978}
   m_CullTransparentMesh: 1
+--- !u!1 &954024890 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2559579190230341853, guid: 3fe7766b712b8d5448b6d3ef93b909da, type: 3}
+  m_PrefabInstance: {fileID: 1313447085}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &954024895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 954024890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b6f5597d12327644bd652d84de29612, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
+  hoverScaleMultiplier: 1.1
 --- !u!114 &1022220155 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3172908636256166831, guid: 3fe7766b712b8d5448b6d3ef93b909da, type: 3}
@@ -1394,6 +1444,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4745642573279389090, guid: 3fe7766b712b8d5448b6d3ef93b909da, type: 3}
       insertIndex: -1
       addedObject: {fileID: 607183378}
+    - targetCorrespondingSourceObject: {fileID: 7104437105303834942, guid: 3fe7766b712b8d5448b6d3ef93b909da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 358095776}
+    - targetCorrespondingSourceObject: {fileID: 2559579190230341853, guid: 3fe7766b712b8d5448b6d3ef93b909da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 954024895}
   m_SourcePrefab: {fileID: 100100000, guid: 3fe7766b712b8d5448b6d3ef93b909da, type: 3}
 --- !u!1 &1497560751
 GameObject:
@@ -1407,6 +1463,7 @@ GameObject:
   - component: {fileID: 1497560755}
   - component: {fileID: 1497560754}
   - component: {fileID: 1497560753}
+  - component: {fileID: 1497560756}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1540,6 +1597,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1497560751}
   m_CullTransparentMesh: 1
+--- !u!114 &1497560756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497560751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b6f5597d12327644bd652d84de29612, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
+  hoverScaleMultiplier: 1.1
 --- !u!1 &1498088786
 GameObject:
   m_ObjectHideFlags: 0

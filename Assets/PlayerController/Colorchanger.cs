@@ -10,7 +10,7 @@ public class PlayerColor : MonoBehaviour
         playerRendere.material.color = rc;
         Debug.Log(rc);
     }
-
+     
     private Color RandomColor()
     {
         int random = Random.Range(0, 4);
