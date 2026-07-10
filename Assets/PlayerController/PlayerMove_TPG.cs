@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
+//[RequireComponent(typeof(CharacterController))]
 public class PlayerMove_TPG : NetworkBehaviour
 {
     public enum PlayerRole { Seeker, Hider }
