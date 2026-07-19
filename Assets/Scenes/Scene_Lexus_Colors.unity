@@ -479,9 +479,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 607265221}
-  - component: {fileID: 607265222}
-  - component: {fileID: 607265224}
   - component: {fileID: 607265223}
+  - component: {fileID: 607265224}
   m_Layer: 0
   m_Name: Color_Manager
   m_TagString: Untagged
@@ -504,24 +503,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &607265222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 607265219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 033f0395ce8fa954ca6fc83459669648, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LexusColorManager
-  ShowTopMostFoldoutHeaderGroup: 1
-  neutralColor: {r: 0.65, g: 0.65, b: 0.68, a: 1}
-  neutralDuration: 5
-  colorDuration: 10
-  transitionDuration: 1
-  directionalLight: {fileID: 203844588}
 --- !u!114 &607265223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -561,11 +542,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LexusColorManager
   ShowTopMostFoldoutHeaderGroup: 1
+  roomObjects:
+  - {fileID: 1865660540}
+  - {fileID: 607693618}
+  - {fileID: 1692785839}
+  - {fileID: 1505991503}
+  - {fileID: 754775961}
+  - {fileID: 359317228}
+  - {fileID: 551792402}
+  - {fileID: 1574241273}
   neutralColor: {r: 0.65, g: 0.65, b: 0.68, a: 1}
   neutralDuration: 5
   colorDuration: 10
   transitionDuration: 1
-  directionalLight: {fileID: 0}
 --- !u!1 &607693615
 GameObject:
   m_ObjectHideFlags: 0
