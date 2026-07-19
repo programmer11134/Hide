@@ -1,37 +1,40 @@
 using UnityEngine;
+using Unity.Netcode;
 
-public class LexusColorManager : MonoBehaviour
+public class LexusColorManager : NetworkBehaviour
 {
     public enum RoomState { Neutral, Colorized }
 
+    [Header("Список объектов комнаты для перекраски")]
+    [Tooltip("Перетащите сюда из иерархии ваш Пол, Стены, Потолок и тестовые кубы")]
+    public Renderer[] roomObjects;
+
     [Header("Настройки цветов")]
-    // Мягкий светло-серый (белый) цвет для обычной дневной фазы
+    // Мягкий светло-серый (белый) цвет стен для обычной дневной фазы
     public Color neutralColor = new Color(0.65f, 0.65f, 0.68f);
 
-    // 4 сочных цвета для охоты (строго по вашему концепту)
-    public Color[] colorPool = new Color[4]
-    {
-        new Color(0.90f, 0.05f, 0.05f), // 1. Яркий Красный
-        new Color(0.10f, 0.35f, 0.85f), // 2. Насыщенный Синий
-        new Color(0.15f, 0.65f, 0.15f), // 3. Сочный Зеленый
-        new Color(0.95f, 0.70f, 0.00f)  // 4. Выразительный Желтый
-    };
+    // Оригинальные цвета игроков из вашего скрипта
+    private Color red = Color.red;
+    private Color blue = Color.blue;
+    private Color green = Color.green;
+    private Color yellow = Color.yellow;
 
     [Header("Настройки таймингов")]
-    public float neutralDuration = 5f;      // Время обычной комнаты
-    public float colorDuration = 10f;        // Время цветной комнаты
-    public float transitionDuration = 1.0f;  // Скорость перехода
+    public float neutralDuration = 5f;
+    public float colorDuration = 10f;
+    public float transitionDuration = 1.0f;
 
-    [Header("Главный свет сцены")]
-    public Light directionalLight;
+    private NetworkVariable<int> activeStateIndex = new NetworkVariable<int>(
+        -1,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server
+    );
 
     private RoomState currentState = RoomState.Neutral;
 
-    // Управляем только солнцем и тенями (ambient)
-    private Color startAmbient;
-    private Color targetAmbient;
-    private Color startSun;
-    private Color targetSun;
+    // Плавный переход цвета только для материалов объектов
+    private Color startColor;
+    private Color targetColor;
 
     private float stateTimer = 0f;
     private float transitionTimer = 0f;
@@ -40,35 +43,58 @@ public class LexusColorManager : MonoBehaviour
 
     void Start()
     {
-        // Выключаем туман на сцене для идеальной точности маскировки
         RenderSettings.fog = false;
 
-        // На старте ставим мягкий дневной свет и глубокие тени
-        ApplySettings(neutralColor * 0.25f, Color.white);
+        // В оффлайн-тесте сразу красим объекты в нейтральный цвет
+        if (!IsSpawned)
+        {
+            ApplySettings(neutralColor);
+            targetColor = neutralColor;
+            stateTimer = neutralDuration;
+        }
+    }
 
-        targetAmbient = neutralColor * 0.25f;
-        targetSun = Color.white;
+    public override void OnNetworkSpawn()
+    {
+        activeStateIndex.OnValueChanged += OnStateChanged;
 
-        stateTimer = neutralDuration;
+        // При спавне в сети красим объекты в нейтральный цвет
+        ApplySettings(neutralColor);
+        targetColor = neutralColor;
+
+        if (IsServer)
+        {
+            stateTimer = neutralDuration;
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        activeStateIndex.OnValueChanged -= OnStateChanged;
     }
 
     void Update()
     {
+        if (IsSpawned && !IsServer) return;
+
         stateTimer -= Time.deltaTime;
         if (stateTimer <= 0)
         {
             SwitchState();
         }
 
+        HandleTransition();
+    }
+
+    private void HandleTransition()
+    {
         if (isTransitioning)
         {
             transitionTimer += Time.deltaTime;
             float progress = transitionTimer / transitionDuration;
 
-            Color currentAmbient = Color.Lerp(startAmbient, targetAmbient, progress);
-            Color currentSun = Color.Lerp(startSun, targetSun, progress);
-
-            ApplySettings(currentAmbient, currentSun);
+            Color currentAmbient = Color.Lerp(startColor, targetColor, progress);
+            ApplySettings(currentAmbient);
 
             if (progress >= 1.0f)
             {
@@ -84,61 +110,116 @@ public class LexusColorManager : MonoBehaviour
             currentState = RoomState.Colorized;
             stateTimer = colorDuration;
 
-            int randomIndex = GetRandomColorIndex();
-            Color nextColor = colorPool[randomIndex];
+            int nextColorIndex = GetUniqueRandomColorIndex();
 
-            // Цветная фаза: солнце яркое, а тени (ambient) делаем глубокими и темными для контраста
-            TriggerTransition(
-                nextColor * 0.22f, // Темные сочные тени
-                nextColor          // Яркое цветное солнце
-            );
+            if (IsSpawned)
+            {
+                activeStateIndex.Value = nextColorIndex;
+            }
+            else
+            {
+                Color nextColor = GetColorByIndex(nextColorIndex);
+                TriggerTransition(nextColor);
+            }
         }
         else
         {
             currentState = RoomState.Neutral;
             stateTimer = neutralDuration;
 
-            // Нейтральная фаза: обычный день с контрастными глубокими тенями
-            TriggerTransition(
-                neutralColor * 0.25f, // Глубокие тени
-                Color.white           // Обычное белое солнце
-            );
+            if (IsSpawned)
+            {
+                activeStateIndex.Value = -1;
+            }
+            else
+            {
+                TriggerTransition(neutralColor);
+            }
         }
     }
 
-    private int GetRandomColorIndex()
+    private void OnStateChanged(int previousValue, int newValue)
     {
-        if (colorPool.Length <= 1) return 0;
+        if (newValue == -1)
+        {
+            TriggerTransition(neutralColor);
+        }
+        else
+        {
+            Color nextColor = GetColorByIndex(newValue);
+            TriggerTransition(nextColor);
+        }
+    }
 
+    private Color GetColorByIndex(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                return blue;
+            case 2:
+                return red;
+            case 3:
+                return green;
+            default:
+                return yellow;
+        }
+    }
+
+    private int GetUniqueRandomColorIndex()
+    {
         int index;
         do
         {
-            index = Random.Range(0, colorPool.Length);
+            index = Random.Range(0, 4);
         } while (index == lastColorIndex);
 
         lastColorIndex = index;
         return index;
     }
 
-    private void TriggerTransition(Color newAmbient, Color newSun)
+    private void TriggerTransition(Color newColor)
     {
-        startAmbient = RenderSettings.ambientLight;
-        targetAmbient = newAmbient;
+        // Берем текущий цвет первого объекта как стартовый для плавного перехода
+        if (roomObjects != null && roomObjects.Length > 0 && roomObjects[0] != null)
+        {
+            startColor = roomObjects[0].material.color;
+        }
+        else
+        {
+            startColor = neutralColor;
+        }
 
-        startSun = directionalLight != null ? directionalLight.color : Color.white;
-        targetSun = newSun;
-
+        targetColor = newColor;
         transitionTimer = 0f;
         isTransitioning = true;
     }
 
-    private void ApplySettings(Color ambient, Color sunColor)
+    // Метод перекрашивает только те объекты, которые вы указали в списке
+    private void ApplySettings(Color color)
     {
-        RenderSettings.ambientLight = ambient;
+        if (roomObjects == null) return;
 
-        if (directionalLight != null)
+        for (int i = 0; i < roomObjects.Length; i++)
         {
-            directionalLight.color = sunColor;
+            if (roomObjects[i] != null)
+            {
+                roomObjects[i].material.color = color;
+            }
+        }
+    }
+
+    // --- АГРЕССИВНОЕ СЕТЕВОЕ ВЫКЛЮЧЕНИЕ НА ВСЕХ ЭТАПАХ ВЫХОДА ---
+    private void OnDisable() { ShutdownNetwork(); }
+    private void OnApplicationQuit() { ShutdownNetwork(); }
+    private void OnDestroy() { ShutdownNetwork(); }
+
+    private void ShutdownNetwork()
+    {
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
+        {
+            NetworkManager.Singleton.Shutdown();
+            Debug.Log("[LexusColorManager] Сеть остановлена, порт освобожден.");
         }
     }
 }
