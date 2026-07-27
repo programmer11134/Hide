@@ -24,7 +24,8 @@ public class LexusColorManager : NetworkBehaviour
     public float colorDuration = 10f;
     public float transitionDuration = 1.0f;
 
-    private NetworkVariable<int> activeStateIndex = new NetworkVariable<int>(
+    // СЕТЕВАЯ ПЕРЕМЕННАЯ (ОБЯЗАТЕЛЬНО ПУБЛИЧНАЯ)
+    public NetworkVariable<int> activeStateIndex = new NetworkVariable<int>(
         -1,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
@@ -32,7 +33,6 @@ public class LexusColorManager : NetworkBehaviour
 
     private RoomState currentState = RoomState.Neutral;
 
-    // Плавный переход цвета только для материалов объектов
     private Color startColor;
     private Color targetColor;
 
@@ -195,7 +195,6 @@ public class LexusColorManager : NetworkBehaviour
         isTransitioning = true;
     }
 
-    // Метод перекрашивает только те объекты, которые вы указали в списке
     private void ApplySettings(Color color)
     {
         if (roomObjects == null) return;
@@ -209,7 +208,20 @@ public class LexusColorManager : NetworkBehaviour
         }
     }
 
-    // --- АГРЕССИВНОЕ СЕТЕВОЕ ВЫКЛЮЧЕНИЕ НА ВСЕХ ЭТАПАХ ВЫХОДА ---
+    public int GetActiveColorIndex()
+    {
+        if (IsSpawned)
+        {
+            return activeStateIndex.Value; // Если играем по сети
+        }
+        else
+        {
+            // Если играем оффлайн без сети
+            return currentState == RoomState.Neutral ? -1 : lastColorIndex;
+        }
+    }
+
+    // --- АВТОМАТИЧЕСКАЯ ОЧИСТКА СЕТЕВЫХ ПОРТОВ ---
     private void OnDisable() { ShutdownNetwork(); }
     private void OnApplicationQuit() { ShutdownNetwork(); }
     private void OnDestroy() { ShutdownNetwork(); }
