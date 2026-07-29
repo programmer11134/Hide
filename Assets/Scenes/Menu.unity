@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 189321523}
   - component: {fileID: 189321522}
   - component: {fileID: 189321521}
+  - component: {fileID: 189321524}
   m_Layer: 5
   m_Name: CREAT
   m_TagString: Untagged
@@ -201,7 +202,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 189321522}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 684378892}
+        m_TargetAssemblyTypeName: RelayController, Assembly-CSharp
+        m_MethodName: StartHostWithRelay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &189321522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,6 +253,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 189321519}
   m_CullTransparentMesh: 1
+--- !u!114 &189321524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189321519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b6f5597d12327644bd652d84de29612, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
+  hoverScaleMultiplier: 1.1
 --- !u!1 &221941752
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,6 +278,7 @@ GameObject:
   - component: {fileID: 221941756}
   - component: {fileID: 221941755}
   - component: {fileID: 221941754}
+  - component: {fileID: 221941757}
   m_Layer: 5
   m_Name: CONNECT
   m_TagString: Untagged
@@ -322,7 +349,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 221941755}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 684378892}
+        m_TargetAssemblyTypeName: RelayController, Assembly-CSharp
+        m_MethodName: StartClientWithRelay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &221941755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,6 +400,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 221941752}
   m_CullTransparentMesh: 1
+--- !u!114 &221941757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221941752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b6f5597d12327644bd652d84de29612, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
+  hoverScaleMultiplier: 1.1
 --- !u!1 &401029156
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,6 +495,7 @@ GameObject:
   - component: {fileID: 411880376}
   - component: {fileID: 411880375}
   - component: {fileID: 411880374}
+  - component: {fileID: 411880377}
   m_Layer: 5
   m_Name: EXIT
   m_TagString: Untagged
@@ -513,7 +566,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 411880375}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 954756001}
+        m_TargetAssemblyTypeName: Menupanel, Assembly-CSharp
+        m_MethodName: Exite
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &411880375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -552,6 +617,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 411880372}
   m_CullTransparentMesh: 1
+--- !u!114 &411880377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411880372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b6f5597d12327644bd652d84de29612, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
+  hoverScaleMultiplier: 1.1
 --- !u!1 &503007662
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,6 +709,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 503007662}
   m_CullTransparentMesh: 1
+--- !u!114 &684378892 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1644934084777220782, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+  m_PrefabInstance: {fileID: 1940372721274252203}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0b4dd90a32bea7488485e53949e5249, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RelayController
 --- !u!1 &860083537
 GameObject:
   m_ObjectHideFlags: 0
@@ -975,6 +1064,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 954756000}
+  - component: {fileID: 954756001}
   m_Layer: 5
   m_Name: MenuManadger
   m_TagString: Untagged
@@ -1007,6 +1097,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &954756001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 954755999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97889e1632bfc55458eb5acf2bd17ad6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Menupanel
 --- !u!1 &972890328
 GameObject:
   m_ObjectHideFlags: 0
@@ -1488,8 +1590,8 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1107065408}
-  m_TextViewport: {fileID: 0}
-  m_TextComponent: {fileID: 0}
+  m_TextViewport: {fileID: 1113673553}
+  m_TextComponent: {fileID: 1352200141}
   m_Placeholder: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
   m_VerticalScrollbarEventHandler: {fileID: 0}
@@ -1650,6 +1752,7 @@ GameObject:
   - component: {fileID: 1114613939}
   - component: {fileID: 1114613938}
   - component: {fileID: 1114613937}
+  - component: {fileID: 1114613940}
   m_Layer: 5
   m_Name: ' SETTINGS'
   m_TagString: Untagged
@@ -1720,7 +1823,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1114613938}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 954755999}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1114613938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1759,6 +1874,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1114613935}
   m_CullTransparentMesh: 1
+--- !u!114 &1114613940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114613935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b6f5597d12327644bd652d84de29612, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
+  hoverScaleMultiplier: 1.1
 --- !u!1 &1264262460
 GameObject:
   m_ObjectHideFlags: 0
@@ -1895,7 +2023,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: "\u200B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 81503ee6550b6564fa23d1572bfa3139, type: 2}
   m_sharedMaterial: {fileID: -3863162277545189305, guid: 81503ee6550b6564fa23d1572bfa3139, type: 2}
@@ -2418,6 +2546,79 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2123725344}
   m_CullTransparentMesh: 1
+--- !u!1001 &1940372721274252203
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 898050147305063503, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 22.39645
+      objectReference: {fileID: 0}
+    - target: {fileID: 898050147305063503, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.43362
+      objectReference: {fileID: 0}
+    - target: {fileID: 898050147305063503, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 16.44382
+      objectReference: {fileID: 0}
+    - target: {fileID: 898050147305063503, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 898050147305063503, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 898050147305063503, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 898050147305063503, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 898050147305063503, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 898050147305063503, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 898050147305063503, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1644934084777220782, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: joinInput
+      value: 
+      objectReference: {fileID: 1107065407}
+    - target: {fileID: 1644934084777220782, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: menuPanel
+      value: 
+      objectReference: {fileID: 954755999}
+    - target: {fileID: 1644934084777220782, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: menuCamera
+      value: 
+      objectReference: {fileID: 972890330}
+    - target: {fileID: 1644934084777220782, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: joinCodeText
+      value: 
+      objectReference: {fileID: 1352200141}
+    - target: {fileID: 2642199213229271577, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
+      propertyPath: m_Name
+      value: NetworkManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d0bf76e598b041c498477d6df68bdf90, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2428,3 +2629,4 @@ SceneRoots:
   - {fileID: 2094905160}
   - {fileID: 401029158}
   - {fileID: 1442707455}
+  - {fileID: 1940372721274252203}

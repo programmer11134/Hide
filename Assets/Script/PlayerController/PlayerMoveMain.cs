@@ -15,37 +15,38 @@ public class PlayerMoveMain : NetworkBehaviour
 
     [Header("Ссылки на объекты")]
     public GameObject playerBodyVisuals;
-    public GameObject weaponFPS;
-    public GameObject weaponTPS;
+    public GameObject weaponFPS; // Оружие от 1-го лица (видит только Seeker сам у себя)
+    public GameObject weaponTPS; // Оружие от 3-го лица (видят другие игроки на Seeker-е)
 
     [Header("Настройки Камеры")]
     public Camera playerCamera;
     public AudioListener audioListener;
 
     [Header("Параметры 3-го лица (Как в ААА играх)")]
-    [SerializeField] private Vector3 shoulderOffset = new Vector3(0.7f, 1.6f, -2.5f); // Смещение: вправо, вверх, назад
-    [SerializeField] private float cameraSmoothTime = 0.15f; // Плавность камеры
-    [SerializeField] private float minPitch = -40f; // Ограничение взгляда вниз
-    [SerializeField] private float maxPitch = 50f;  // Ограничение взгляда вверх
+    [SerializeField] private Vector3 shoulderOffset = new Vector3(0.7f, 1.6f, -2.5f);
+    [SerializeField] private float cameraSmoothTime = 0.15f;
+    [SerializeField] private float minPitch = -40f;
+    [SerializeField] private float maxPitch = 50f;
     [SerializeField] private LayerMask collisionLayers;
 
     [Header("Параметры движения")]
     public float walkSpeed = 5f;
     public float runSpeed = 8f;
     public float jumpHeight = 2f;
-    public float gravity = -25f; // Усиленная гравитация для реализма
+    public float gravity = -25f;
     public float mouseSensitivity = 2f;
 
     private CharacterController controller;
     private Vector3 moveDirection = Vector3.zero;
-    private float pitch = 0f; // Вращение камеры вверх/вниз
-    private float yaw = 0f;   // Вращение игрока влево/вправо
+    private float pitch = 0f;
+    private float yaw = 0f;
     private Vector3 currentCameraVelocity;
     private Vector3 cameraTargetPosition;
 
     public override void OnNetworkSpawn()
     {
         controller = GetComponent<CharacterController>();
+        currentRole.OnValueChanged += OnRoleChanged;
 
         if (IsOwner)
         {
@@ -55,34 +56,43 @@ public class PlayerMoveMain : NetworkBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
-            // Начальные углы
             yaw = transform.eulerAngles.y;
-
-            currentRole.OnValueChanged += OnRoleChanged;
-            UpdateVisuals(currentRole.Value);
         }
         else
         {
             playerCamera.gameObject.SetActive(false);
-            if (weaponFPS) weaponFPS.SetActive(false);
-            if (weaponTPS) weaponTPS.SetActive(true);
         }
+
+        UpdateVisuals(currentRole.Value);
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        currentRole.OnValueChanged -= OnRoleChanged;
     }
 
     private void OnRoleChanged(PlayerRole oldRole, PlayerRole newRole) => UpdateVisuals(newRole);
 
     private void UpdateVisuals(PlayerRole role)
     {
-        if (!IsOwner) return;
+        bool isSeeker = (role == PlayerRole.Seeker);
 
-        bool isFirstPerson = (role == PlayerRole.Seeker);
+        if (IsOwner)
+        {
+            // Если владелец Seeker (1-е лицо) -> показываем оружие 1-го лица. Если Hider -> оружия нет вообще
+            if (weaponFPS) weaponFPS.SetActive(isSeeker);
+            if (weaponTPS) weaponTPS.SetActive(false); // Владелец никогда не видит свое TPS оружие
 
-        if (weaponFPS) weaponFPS.SetActive(isFirstPerson);
-        if (weaponTPS) weaponTPS.SetActive(!isFirstPerson);
-
-        // В 3-м лице ВСЕГДА показываем тело полностью
-        ShadowCastingMode mode = isFirstPerson ? ShadowCastingMode.ShadowsOnly : ShadowCastingMode.On;
-        SetShadowMode(playerBodyVisuals, mode);
+            // В 1-м лице (Seeker) скрываем меш тела (оставляем только тени). В 3-м лице (Hider) показываем тело полностью
+            ShadowCastingMode mode = isSeeker ? ShadowCastingMode.ShadowsOnly : ShadowCastingMode.On;
+            SetShadowMode(playerBodyVisuals, mode);
+        }
+        else
+        {
+            // Для сторонних игроков: они видят оружие на персонаже, только если он Seeker (Ищущий)
+            if (weaponFPS) weaponFPS.SetActive(false);
+            if (weaponTPS) weaponTPS.SetActive(isSeeker);
+        }
     }
 
     private void SetShadowMode(GameObject target, ShadowCastingMode mode)
@@ -90,7 +100,6 @@ public class PlayerMoveMain : NetworkBehaviour
         if (target == null) return;
         foreach (var r in target.GetComponentsInChildren<Renderer>(true))
         {
-            // Руки для 1-го лица всегда видны
             if (weaponFPS != null && r.transform.IsChildOf(weaponFPS.transform))
                 r.shadowCastingMode = ShadowCastingMode.On;
             else
@@ -106,10 +115,13 @@ public class PlayerMoveMain : NetworkBehaviour
         HandleMovement();
     }
 
-    void LateUpdate() // Камера всегда в LateUpdate для отсутствия дрожания
+    void LateUpdate()
     {
         if (!IsOwner) return;
 
+        // ВОЗВРАЩЕНО НАЗАД:
+        // Hider (Прячущийся) играет от 3-го лица
+        // Seeker (Ищущий) играет от 1-го лица
         if (currentRole.Value == PlayerRole.Hider)
             ApplyThirdPersonCamera();
         else
@@ -128,7 +140,6 @@ public class PlayerMoveMain : NetworkBehaviour
 
     void HandleMovement()
     {
-        // Вращаем персонажа по горизонтали (yaw)
         transform.rotation = Quaternion.Euler(0f, yaw, 0f);
 
         bool isGrounded = controller.isGrounded;
@@ -152,24 +163,16 @@ public class PlayerMoveMain : NetworkBehaviour
 
     void ApplyFirstPersonCamera()
     {
-        // Просто привязываем к голове
         playerCamera.transform.position = transform.position + Vector3.up * 1.6f;
         playerCamera.transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
     }
 
     void ApplyThirdPersonCamera()
     {
-        // 1. Рассчитываем идеальную позицию камеры
-        // Точка вращения (Pivot) - это центр игрока + смещение по высоте
         Vector3 pivotPoint = transform.position + Vector3.up * shoulderOffset.y;
-
-        // Поворот камеры (объединяем горизонтальный yaw и вертикальный pitch)
         Quaternion cameraRotation = Quaternion.Euler(pitch, yaw, 0f);
-
-        // Смещение камеры назад и вбок относительно поворота
         Vector3 targetPos = pivotPoint + (cameraRotation * new Vector3(shoulderOffset.x, 0, shoulderOffset.z));
 
-        // 2. Проверка коллизий (чтобы камера не заходила в стены)
         RaycastHit hit;
         Vector3 dirToCamera = (targetPos - pivotPoint).normalized;
         float maxDist = Vector3.Distance(pivotPoint, targetPos);
@@ -179,11 +182,8 @@ public class PlayerMoveMain : NetworkBehaviour
             targetPos = pivotPoint + dirToCamera * (hit.distance - 0.1f);
         }
 
-        // 3. Плавное движение камеры к цели
         playerCamera.transform.position = Vector3.SmoothDamp(playerCamera.transform.position, targetPos, ref currentCameraVelocity, cameraSmoothTime);
 
-        // 4. Поворот камеры: она должна смотреть в точку перед игроком (прицел)
-        // Рассчитываем точку, куда игрок "целится"
         Vector3 lookAtPoint = pivotPoint + (cameraRotation * Vector3.forward * 100f);
         playerCamera.transform.LookAt(lookAtPoint);
     }
