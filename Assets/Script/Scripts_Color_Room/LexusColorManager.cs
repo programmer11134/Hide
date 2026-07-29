@@ -6,14 +6,11 @@ public class LexusColorManager : NetworkBehaviour
     public enum RoomState { Neutral, Colorized }
 
     [Header("Список объектов комнаты для перекраски")]
-    [Tooltip("Перетащите сюда из иерархии ваш Пол, Стены, Потолок и тестовые кубы")]
     public Renderer[] roomObjects;
 
     [Header("Настройки цветов")]
-    // Мягкий светло-серый (белый) цвет стен для обычной дневной фазы
     public Color neutralColor = new Color(0.65f, 0.65f, 0.68f);
 
-    // Оригинальные цвета игроков из вашего скрипта
     private Color red = Color.red;
     private Color blue = Color.blue;
     private Color green = Color.green;
@@ -24,7 +21,6 @@ public class LexusColorManager : NetworkBehaviour
     public float colorDuration = 10f;
     public float transitionDuration = 1.0f;
 
-    // СЕТЕВАЯ ПЕРЕМЕННАЯ (ОБЯЗАТЕЛЬНО ПУБЛИЧНАЯ)
     public NetworkVariable<int> activeStateIndex = new NetworkVariable<int>(
         -1,
         NetworkVariableReadPermission.Everyone,
@@ -45,7 +41,6 @@ public class LexusColorManager : NetworkBehaviour
     {
         RenderSettings.fog = false;
 
-        // В оффлайн-тесте сразу красим объекты в нейтральный цвет
         if (!IsSpawned)
         {
             ApplySettings(neutralColor);
@@ -58,7 +53,6 @@ public class LexusColorManager : NetworkBehaviour
     {
         activeStateIndex.OnValueChanged += OnStateChanged;
 
-        // При спавне в сети красим объекты в нейтральный цвет
         ApplySettings(neutralColor);
         targetColor = neutralColor;
 
@@ -180,7 +174,6 @@ public class LexusColorManager : NetworkBehaviour
 
     private void TriggerTransition(Color newColor)
     {
-        // Берем текущий цвет первого объекта как стартовый для плавного перехода
         if (roomObjects != null && roomObjects.Length > 0 && roomObjects[0] != null)
         {
             startColor = roomObjects[0].material.color;
@@ -212,24 +205,17 @@ public class LexusColorManager : NetworkBehaviour
     {
         if (IsSpawned)
         {
-            return activeStateIndex.Value; // Если играем по сети
+            return activeStateIndex.Value;
         }
         else
         {
-            // Если играем оффлайн без сети
             return currentState == RoomState.Neutral ? -1 : lastColorIndex;
         }
     }
 
-    // --- АВТОМАТИЧЕСКАЯ ОЧИСТКА СЕТЕВЫХ ПОРТОВ ---
     private void OnDisable() { ShutdownNetwork(); }
     private void OnApplicationQuit() { ShutdownNetwork(); }
-
-    public override void OnDestroy()
-    {
-        ShutdownNetwork();
-        base.OnDestroy(); // Обязательный вызов базового метода NetworkBehaviour
-    }
+    private void OnDestroy() { ShutdownNetwork(); }
 
     private void ShutdownNetwork()
     {
