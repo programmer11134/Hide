@@ -34,7 +34,7 @@ public class PlayerMoveMain : NetworkBehaviour
     public float runSpeed = 8f;
     public float jumpHeight = 2f;
     public float gravity = -25f;
-    public float mouseSensitivity = 2f;
+    public float mouseSensitivity;
 
     private CharacterController controller;
     private Vector3 moveDirection = Vector3.zero;
@@ -43,6 +43,11 @@ public class PlayerMoveMain : NetworkBehaviour
     private Vector3 currentCameraVelocity;
     private Vector3 cameraTargetPosition;
 
+
+    private void Start()
+    {
+        mouseSensitivity = PlayerPrefs.GetFloat("Sensivity");
+    }
     public override void OnNetworkSpawn()
     {
         controller = GetComponent<CharacterController>();
